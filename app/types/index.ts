@@ -18,6 +18,14 @@ export interface BeneficiaryInfo {
   uploadedFiles: UploadedFileData[];
   additionalInfo: string;
   recipientEmail: string;
+  petitionerName?: string;
+  itinerary?: string;
+  // Legacy/alias fields for compatibility
+  fieldOfExpertise?: string; // alias for fieldOfProfession
+  urls?: string[]; // alias for primaryUrls
+  jobTitle?: string; // professional title/descriptor
+  occupation?: string; // occupation/role
+  nationality?: string; // country of origin
 }
 
 export interface GenerationProgress {
