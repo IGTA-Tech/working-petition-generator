@@ -219,7 +219,7 @@ export async function generateLegalBriefMultiStep(
 
   // STEP 1: Header + Sections 1-7 (Everything up to criteria analysis)
   console.log(`\n📄 Step 1/3: Generating header, petitioner info, and beneficiary background...`);
-  const part1 = await generatePart1(beneficiaryInfo, knowledgeBase, doc1, doc2, doc3, visaInfo, cfrSection, isOorP, isEB1A, briefMode, maxTokensMultiplier);
+  const part1 = await generatePart1(beneficiaryInfo, knowledgeBase, doc1, doc2, doc3, visaInfo, cfrSection, isOorP, isEB1A);
   console.log(`   ✅ Part 1 complete: ~${part1.split(' ').length} words`);
 
   // STEP 2: Section 8 - ALL Criteria Analysis (The heavy lifting)
