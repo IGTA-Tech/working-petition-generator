@@ -207,7 +207,7 @@ CRITICAL REQUIREMENTS:
 Generate the COMPLETE comprehensive analysis now (aim for maximum detail and length):`;
 
   const response = await anthropic.messages.create({
-    model: 'claude-sonnet-3-5-20241022',
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: 20480, // Increased by 25% from 16384 to prevent timeout truncation
     temperature: 0.3,
     messages: [
@@ -339,7 +339,7 @@ CRITICAL REQUIREMENTS:
 Generate the COMPLETE publication analysis now (aim for maximum detail and length):`;
 
   const response = await anthropic.messages.create({
-    model: 'claude-sonnet-3-5-20241022',
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: 20480, // Increased by 25% from 16384 to prevent timeout truncation
     temperature: 0.3,
     messages: [
@@ -422,7 +422,7 @@ Generate a URL Reference Document with this EXACT structure:
 Generate the COMPLETE URL reference document now:`;
 
   const response = await anthropic.messages.create({
-    model: 'claude-sonnet-3-5-20241022',
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: 10240, // Increased by 25% from 8192 for more comprehensive URL reference
     temperature: 0.2,
     messages: [
@@ -623,7 +623,7 @@ CRITICAL REQUIREMENTS:
 Generate the COMPLETE legal brief now (aim for maximum professional detail and length):`;
 
   const response = await anthropic.messages.create({
-    model: 'claude-sonnet-3-5-20241022',
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: 20480, // Increased by 25% from 16384 to prevent timeout truncation
     temperature: 0.3,
     messages: [
