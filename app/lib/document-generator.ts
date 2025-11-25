@@ -205,13 +205,15 @@ export async function generateAllDocuments(
   );
 
   // Stage 7: Generate Document 4 - Legal Brief (85%)
-  onProgress?.('Generating Legal Brief', 85, `Creating attorney-grade ${beneficiaryInfo.visaType} legal brief matching DIY template (20-25 min)... Final stage!`);
+  const briefModeText = beneficiaryInfo.briefMode === 'standard' ? 'standard (15-25 pages)' : 'comprehensive (40-80 pages)';
+  onProgress?.('Generating Legal Brief', 85, `Creating ${briefModeText} attorney-grade ${beneficiaryInfo.visaType} legal brief (20-25 min)... Final stage!`);
   const document4 = await generateLegalBrief(
     beneficiaryInfo,
     knowledgeBaseContext,
     document1,
     document2,
-    document3
+    document3,
+    urlsAnalyzed
   );
 
   onProgress?.('Finalizing', 95, 'All documents generated successfully! Preparing email delivery...');
@@ -930,10 +932,11 @@ async function generateLegalBrief(
   knowledgeBase: string,
   doc1: string,
   doc2: string,
-  doc3: string
+  doc3: string,
+  urlsAnalyzed?: FetchedUrlData[]
 ): Promise<string> {
-  // Use the new multi-step generator
-  return await generateLegalBriefMultiStep(beneficiaryInfo, knowledgeBase, doc1, doc2, doc3);
+  // Use the new multi-step generator with smart filtering
+  return await generateLegalBriefMultiStep(beneficiaryInfo, knowledgeBase, doc1, doc2, doc3, urlsAnalyzed);
 }
 
 // OLD SINGLE-STEP VERSION (KEPT FOR REFERENCE - NOT USED)

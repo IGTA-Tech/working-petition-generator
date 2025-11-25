@@ -3,10 +3,89 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { BeneficiaryInfo } from '../types';
+import { FetchedUrlData } from './url-fetcher';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+// Smart filtering function for 40+ sources
+function filterBestEvidence(urls: FetchedUrlData[], briefMode: 'standard' | 'comprehensive' = 'comprehensive'): FetchedUrlData[] {
+  const totalSources = urls.length;
+
+  // Determine target count based on brief mode
+  const targetCounts = {
+    standard: 15,        // Standard: Top 15 best sources
+    comprehensive: 20    // Comprehensive: Top 20 best sources
+  };
+
+  const targetCount = targetCounts[briefMode];
+
+  // If we're under the threshold, return all
+  if (totalSources <= targetCount) {
+    console.log(`📊 Evidence Filtering: ${totalSources} sources (under threshold, using all)`);
+    return urls;
+  }
+
+  // If we have 40+ sources, apply smart filtering
+  if (totalSources >= 40) {
+    console.log(`📊 Evidence Filtering: ${totalSources} sources detected (40+ threshold triggered)`);
+    console.log(`   🎯 Target: Top ${targetCount} sources for ${briefMode} mode`);
+
+    // Score each URL based on tier and quality
+    const scoredUrls = urls.map(url => {
+      let score = 0;
+
+      // Tier-based scoring (from Document 2 tier analysis)
+      const domain = url.domain.toLowerCase();
+
+      // Tier 1 sources (Gold standard) - 100 points
+      const tier1Domains = ['bbc.co.uk', 'bbc.com', 'espn.com', 'cnn.com', 'reuters.com', 'ap.org',
+                           'nytimes.com', 'wsj.com', 'washingtonpost.com', 'usatoday.com'];
+      if (tier1Domains.some(t1 => domain.includes(t1))) {
+        score += 100;
+      }
+
+      // Tier 2 sources (Strong) - 70 points
+      const tier2Keywords = ['official', 'gov', 'edu', 'org', 'sports', 'olympics', 'fifa', 'uefa',
+                            'agency', 'talent', 'verified', 'profile'];
+      if (tier2Keywords.some(keyword => domain.includes(keyword) || url.title.toLowerCase().includes(keyword))) {
+        score += 70;
+      }
+
+      // Title quality indicators - up to 30 points
+      const titleLower = url.title.toLowerCase();
+      if (titleLower.includes('national team')) score += 30;
+      if (titleLower.includes('champion') || titleLower.includes('winner')) score += 20;
+      if (titleLower.includes('award') || titleLower.includes('prize')) score += 20;
+      if (titleLower.includes('official') || titleLower.includes('profile')) score += 15;
+      if (titleLower.includes('ranking')) score += 15;
+
+      // Content length (longer = more detailed) - up to 20 points
+      const contentLength = url.content.length;
+      if (contentLength > 5000) score += 20;
+      else if (contentLength > 2000) score += 10;
+      else if (contentLength > 500) score += 5;
+
+      return { url, score };
+    });
+
+    // Sort by score (highest first) and take top N
+    const filtered = scoredUrls
+      .sort((a, b) => b.score - a.score)
+      .slice(0, targetCount)
+      .map(item => item.url);
+
+    console.log(`   ✅ Filtered to top ${filtered.length} highest-quality sources`);
+    console.log(`   📊 Score range: ${scoredUrls[0].score} (best) to ${scoredUrls[scoredUrls.length - 1].score} (lowest)`);
+
+    return filtered;
+  }
+
+  // Between target and 40: return all
+  console.log(`📊 Evidence Filtering: ${totalSources} sources (under 40, using all)`);
+  return urls;
+}
 
 interface VisaInfo {
   count: number;
@@ -111,22 +190,36 @@ export async function generateLegalBriefMultiStep(
   knowledgeBase: string,
   doc1: string,
   doc2: string,
-  doc3: string
+  doc3: string,
+  urlsAnalyzed?: FetchedUrlData[]
 ): Promise<string> {
 
   const visaInfo = getVisaCriteria(beneficiaryInfo.visaType);
   const cfrSection = getCFRSection(beneficiaryInfo.visaType);
   const isOorP = ['O-1A', 'O-1B', 'P-1A'].includes(beneficiaryInfo.visaType);
   const isEB1A = beneficiaryInfo.visaType === 'EB-1A';
+  const briefMode = beneficiaryInfo.briefMode || 'comprehensive';
 
   console.log(`\n🔧 Multi-Step Generation: ${beneficiaryInfo.visaType} Legal Brief`);
   console.log(`   Criteria: ${visaInfo.count} total, need ${visaInfo.minimum} minimum`);
   console.log(`   Comparable Evidence: ${visaInfo.hasComparableEvidence ? 'YES' : 'NO'}`);
   console.log(`   Structure: ${isOorP ? 'O/P visa format' : 'EB-1A format'}`);
+  console.log(`   Brief Mode: ${briefMode.toUpperCase()}`);
+
+  // Apply smart filtering if we have URLs and 40+ sources
+  let filteredUrls = urlsAnalyzed;
+  if (urlsAnalyzed && urlsAnalyzed.length > 0) {
+    filteredUrls = filterBestEvidence(urlsAnalyzed, briefMode);
+    console.log(`   📊 Sources: ${urlsAnalyzed.length} total → ${filteredUrls.length} selected for analysis`);
+  }
+
+  // Adjust max_tokens based on brief mode
+  const maxTokensMultiplier = briefMode === 'standard' ? 0.6 : 1.0; // Standard uses 60% of tokens
+  console.log(`   📝 Token allocation: ${briefMode === 'standard' ? '60%' : '100%'} (${briefMode} mode)`);
 
   // STEP 1: Header + Sections 1-7 (Everything up to criteria analysis)
   console.log(`\n📄 Step 1/3: Generating header, petitioner info, and beneficiary background...`);
-  const part1 = await generatePart1(beneficiaryInfo, knowledgeBase, doc1, doc2, doc3, visaInfo, cfrSection, isOorP, isEB1A);
+  const part1 = await generatePart1(beneficiaryInfo, knowledgeBase, doc1, doc2, doc3, visaInfo, cfrSection, isOorP, isEB1A, briefMode, maxTokensMultiplier);
   console.log(`   ✅ Part 1 complete: ~${part1.split(' ').length} words`);
 
   // STEP 2: Section 8 - ALL Criteria Analysis (The heavy lifting)

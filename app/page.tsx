@@ -26,6 +26,7 @@ export default function Home() {
     uploadedFiles: [],
     additionalInfo: '',
     recipientEmail: '',
+    briefMode: 'comprehensive',
   });
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -658,6 +659,110 @@ export default function Home() {
                   onChange={(e) => handleInputChange('recipientEmail', e.target.value)}
                   placeholder="your.email@example.com"
                 />
+              </div>
+
+              {/* Brief Generation Mode Selection */}
+              <div className="border-2 border-primary-200 rounded-lg p-6 bg-gradient-to-r from-primary-50 to-purple-50">
+                <label className="block text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <FileText size={20} className="text-primary-600" />
+                  Legal Brief Generation Mode *
+                </label>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Standard Mode */}
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('briefMode', 'standard')}
+                    className={`relative p-5 rounded-lg border-2 transition-all text-left ${
+                      formData.briefMode === 'standard'
+                        ? 'border-primary-600 bg-white shadow-lg ring-2 ring-primary-200'
+                        : 'border-gray-300 bg-white hover:border-primary-300 hover:shadow-md'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-lg font-bold text-gray-900">Standard Brief</h3>
+                      {formData.briefMode === 'standard' && (
+                        <CheckCircle size={24} className="text-primary-600" />
+                      )}
+                    </div>
+
+                    <div className="space-y-2 text-sm">
+                      <p className="text-gray-700 font-semibold">📄 ~15-25 pages (~10,000 words)</p>
+                      <ul className="space-y-1 text-gray-600">
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>Focused on 3-4 strongest criteria</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>Concise legal arguments</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>Top 12-15 best exhibits analyzed</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>Faster generation (~15-20 min)</span>
+                        </li>
+                      </ul>
+                      <p className="text-gray-700 font-semibold mt-3">
+                        💡 Best for: Obvious/strong cases with clear qualifications
+                      </p>
+                    </div>
+                  </button>
+
+                  {/* Comprehensive Mode */}
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('briefMode', 'comprehensive')}
+                    className={`relative p-5 rounded-lg border-2 transition-all text-left ${
+                      formData.briefMode === 'comprehensive'
+                        ? 'border-purple-600 bg-white shadow-lg ring-2 ring-purple-200'
+                        : 'border-gray-300 bg-white hover:border-purple-300 hover:shadow-md'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-lg font-bold text-gray-900">Comprehensive Brief</h3>
+                      {formData.briefMode === 'comprehensive' && (
+                        <CheckCircle size={24} className="text-purple-600" />
+                      )}
+                    </div>
+
+                    <div className="space-y-2 text-sm">
+                      <p className="text-gray-700 font-semibold">📚 ~40-80 pages (~20,000 words)</p>
+                      <ul className="space-y-1 text-gray-600">
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>All 6 criteria analyzed in detail</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>Extensive legal citations & arguments</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>15-20+ exhibits with full analysis</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span>✓</span>
+                          <span>Detailed evidence index & scoring</span>
+                        </li>
+                      </ul>
+                      <p className="text-gray-700 font-semibold mt-3">
+                        💡 Best for: Complex/borderline cases, new fields, young beneficiaries
+                      </p>
+                    </div>
+                  </button>
+                </div>
+
+                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-900">
+                    <strong>ℹ️ Smart Filtering:</strong> If Perplexity research discovers 40+ sources,
+                    we'll automatically select the highest-quality Tier 1-2 evidence to keep your brief
+                    focused and impactful.
+                  </p>
+                </div>
               </div>
 
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">

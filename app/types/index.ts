@@ -9,6 +9,8 @@ export interface UploadedFileData {
   summary: string;
 }
 
+export type BriefMode = 'standard' | 'comprehensive';
+
 export interface BeneficiaryInfo {
   fullName: string;
   visaType: VisaType;
@@ -20,6 +22,7 @@ export interface BeneficiaryInfo {
   recipientEmail: string;
   petitionerName?: string;
   itinerary?: string;
+  briefMode?: BriefMode; // Generation mode selection
   // Legacy/alias fields for compatibility
   fieldOfExpertise?: string; // alias for fieldOfProfession
   urls?: string[]; // alias for primaryUrls
