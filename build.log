@@ -1,0 +1,156 @@
+
+> visa-petition-generator@1.0.0 build
+> next build
+
+ ⚠ You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env
+  ▲ Next.js 14.2.18
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+API key does not start with "SG.".
+API key does not start with "SG.".
+API key does not start with "SG.".
+   Generating static pages (0/5) ...
+   Generating static pages (1/5) 
+Error: <Html> should not be imported outside of pages/_document.
+Read more: https://nextjs.org/docs/messages/no-document-import-in-page
+    at Q (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/pages.runtime.prod.js:16:5430)
+    at I (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/682.js:6:1263)
+    at renderWithHooks (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at finishClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5688:3)
+    at renderClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5696:3)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5954:7)
+
+Error occurred prerendering page "/500". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: <Html> should not be imported outside of pages/_document.
+Read more: https://nextjs.org/docs/messages/no-document-import-in-page
+    at Q (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/pages.runtime.prod.js:16:5430)
+    at I (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/682.js:6:1263)
+    at renderWithHooks (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at finishClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5688:3)
+    at renderClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5696:3)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5954:7)
+Error: <Html> should not be imported outside of pages/_document.
+Read more: https://nextjs.org/docs/messages/no-document-import-in-page
+    at Q (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/pages.runtime.prod.js:16:5430)
+    at I (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/682.js:6:1263)
+    at renderWithHooks (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at finishClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5688:3)
+    at renderClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5696:3)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5954:7)
+
+Error occurred prerendering page "/404". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: <Html> should not be imported outside of pages/_document.
+Read more: https://nextjs.org/docs/messages/no-document-import-in-page
+    at Q (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/pages.runtime.prod.js:16:5430)
+    at I (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/682.js:6:1263)
+    at renderWithHooks (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at finishClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5688:3)
+    at renderClassComponent (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5696:3)
+    at renderElement (/home/innovativeautomations/visa-petition-generator/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5954:7)
+   Generating static pages (2/5) 
+   Generating static pages (3/5) 
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:109363)
+    at d (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:21677)
+    at h (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:13615)
+    at au (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908) {
+  digest: '1906433788'
+}
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:109363)
+    at d (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:21677)
+    at h (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:13615)
+    at au (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:109363)
+    at d (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:21677)
+    at h (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:13615)
+    at au (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:109363)
+    at d (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:21677)
+    at h (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:13615)
+    at au (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908) {
+  digest: '1906433788'
+}
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:109363)
+    at d (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:21677)
+    at h (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:13615)
+    at au (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+
+Error occurred prerendering page "/_not-found". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:109363)
+    at d (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:21677)
+    at h (/home/innovativeautomations/visa-petition-generator/.next/server/chunks/892.js:1:13615)
+    at au (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/home/innovativeautomations/visa-petition-generator/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+ ✓ Generating static pages (5/5)
+
+> Export encountered errors on following paths:
+	/_error: /404
+	/_error: /500
+	/_not-found/page: /_not-found
+	/page: /
