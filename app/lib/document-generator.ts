@@ -136,79 +136,75 @@ KNOWLEDGE BASE:
 ${knowledgeBase.substring(0, 50000)}
 
 YOUR TASK:
-Generate a comprehensive 75+ page VISA PETITION ANALYSIS document following this EXACT structure:
+Generate a SOURCE-FOCUSED VISA PETITION ANALYSIS document following this structure:
 
 # COMPREHENSIVE VISA PETITION ANALYSIS
 ## ${beneficiaryInfo.visaType} CLASSIFICATION - ${beneficiaryInfo.fullName}
 
 ### EXECUTIVE SUMMARY
-[3-4 paragraphs with key findings and recommendation]
+[2-3 paragraphs: Key findings, source quality assessment, recommendation]
 
-### PART 1: VISA TYPE DETERMINATION
-[Explain why ${beneficiaryInfo.visaType} is appropriate for this beneficiary]
+### PART 1: SOURCE QUALITY OVERVIEW
+**Total Sources Analyzed**: [Number]
+**Source Breakdown by Type**:
+- Tier 1 (Major Media/Official): [X sources]
+- Tier 2 (Industry/Regional): [Y sources]
+- Tier 3 (General/Local): [Z sources]
+
+**Credibility Assessment**:
+[Rate each source's credibility and explain WHY it matters]
 
 ### PART 2: REGULATORY FRAMEWORK
-[Legal standards for ${beneficiaryInfo.visaType} - use EXACT regulatory language from knowledge base]
+[Brief overview of ${beneficiaryInfo.visaType} standards with key regulatory citations]
 
-### PART 3: CRITERION-BY-CRITERION ANALYSIS
+### PART 3: CRITERION-BY-CRITERION SOURCE MAPPING
 
 For EACH criterion applicable to ${beneficiaryInfo.visaType}:
 
 #### Criterion [Number]: [Name]
-**Regulatory Language**: [Exact text from regulations]
-**Scoring**: [Points awarded] / [Max points]
-**Assessment**: [Detailed 2-3 paragraph analysis]
-**Evidence Provided**:
-- [List ALL relevant evidence with quality assessment]
-**Strengths**: [What's strong about this criterion]
-**Weaknesses**: [What's lacking or could be improved]
+**Regulatory Standard**: [Key requirement]
+**Sources Supporting This Criterion**:
+1. [URL] - [Source Name] - **Tier [X]** - [Why this source is credible and how it proves the criterion]
+2. [URL] - [Source Name] - **Tier [X]** - [Explanation]
+[List all relevant sources]
 
-[Repeat for ALL applicable criteria - minimum 8 criteria for O-1A/EB-1A, 6 for O-1B, 5 for P-1A]
+**Source Quality Analysis**: [Are sources strong enough? What's missing?]
+**Additional Sources Needed**: [Suggest specific types of sources to find]
 
-### PART 4: EVIDENCE MAPPING
-[Create a table mapping all evidence to specific criteria]
+### PART 4: EVIDENCE GAPS & SOURCE RECOMMENDATIONS
+**Current Evidence Strength**: [Strong/Moderate/Weak per criterion]
+**Missing Source Types**:
+- [Type of source needed] - Why it would strengthen the case
+- [Suggested search queries to find more sources]
+**Recommended Additional URLs**: [Specific suggestions for where to look]
 
-### PART 5: SCORING SUMMARY
-- Total Points: [X]
-- Threshold for Approval: [Y]
-- Classification: [Strong Approval / Likely Approval / Borderline / Likely Denial]
-- Confidence Level: [X%]
-- Approval Probability: [X%]
+### PART 5: SOURCE VERIFICATION & CREDIBILITY
+[Analyze each major source's credibility, reach, and reputation]
 
-### PART 6: STRENGTHS ANALYSIS
-[Detailed 3-5 paragraph analysis of strongest aspects]
+### PART 6: APPROVAL ASSESSMENT
+- Evidence Quality Score: [X/10]
+- Source Diversity Score: [X/10]
+- Overall Strength: [Strong/Moderate/Weak]
+- Approval Probability: [X%] based on source quality
 
-### PART 7: WEAKNESSES & GAPS
-[Detailed analysis of what's missing or weak, with specific recommendations]
-
-### PART 8: APPROVAL PROBABILITY ASSESSMENT
-[Statistical analysis and prediction with reasoning]
-
-### PART 9: RECOMMENDATIONS
-[Minimum 10 specific, actionable recommendations to strengthen the case]
-
-### PART 10: CONCLUSION
-[3-4 paragraph summary and final recommendation]
+### PART 7: ACTIONABLE RECOMMENDATIONS
+[10 specific recommendations for finding better sources and strengthening evidence]
 
 CRITICAL REQUIREMENTS:
-- **LENGTH**: This MUST be a COMPREHENSIVE 75+ PAGE document (~40,000+ words)
-- **DETAIL LEVEL**: Each criterion analysis should be 3-5 pages with extensive detail
-- Write in COMPLETE, DETAILED paragraphs - not bullet points
-- Include ALL criteria (8 for O-1A/EB-1A, 6 for O-1B, 5 for P-1A)
-- Use exact regulatory language from knowledge base with full citations
-- Apply proper evidence weighting with detailed scoring explanations
-- Provide extensive statistical analysis and comparisons
-- Include 10+ specific, detailed recommendations (1-2 paragraphs each)
-- Be objective - highlight both strengths AND weaknesses extensively
-- Reference specific URLs throughout with detailed analysis
+- **FOCUS ON SOURCES**: Emphasize source quality, credibility, and categorization over word count
+- **TARGET LENGTH**: 10,000-15,000 words (concise but thorough)
+- **CITE EVERY SOURCE**: Reference specific URLs with credibility assessments
+- **IDENTIFY GAPS**: Clearly state what sources are missing
+- **SUGGEST SEARCHES**: Recommend specific search queries to find additional evidence
+- **TIER RATINGS**: Clearly rate each source's credibility (Tier 1/2/3)
+- **BE SPECIFIC**: Don't just say "need more evidence" - say exactly what type of source would help
+- **CONTEXT MATTERS**: Explain WHY each source matters for USCIS evaluation
 
-**OUTPUT FORMAT**: Generate the FULL, UNABBREVIATED document. Do NOT summarize or shorten. Write as if this is the complete final document that will be given to an attorney.
-
-Generate the COMPLETE comprehensive analysis now (aim for maximum detail and length):`;
+Generate the analysis now with strong focus on source quality and discovery:`;
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 20480, // Increased by 25% from 16384 to prevent timeout truncation
+    max_tokens: 12000, // Optimized for source-focused analysis (10K-15K words)
     temperature: 0.3,
     messages: [
       {
@@ -262,85 +258,81 @@ CONTEXT FROM COMPREHENSIVE ANALYSIS:
 ${comprehensiveAnalysis.substring(0, 5000)}
 
 YOUR TASK:
-Generate a 40+ page PUBLICATION SIGNIFICANCE ANALYSIS following this EXACT structure:
+Generate a SOURCE CREDIBILITY & MEDIA SIGNIFICANCE ANALYSIS:
 
 # PUBLICATION SIGNIFICANCE ANALYSIS
 ## MEDIA COVERAGE ASSESSMENT - ${beneficiaryInfo.fullName}
 
 ### EXECUTIVE SUMMARY
-[Overview of media coverage quality and reach]
+[Overview: Total sources, credibility breakdown, overall media presence strength]
 
-### PART 1: METHODOLOGY
-[Explain how publications were evaluated - circulation data, editorial standards, etc.]
+### PART 1: SOURCE-BY-SOURCE CREDIBILITY ANALYSIS
 
-### PART 2: PUBLICATION-BY-PUBLICATION ANALYSIS
+For EACH URL provided, assess:
 
-For EACH URL provided:
-
-#### Publication #[N]: [Publication Name]
+#### Source #[N]: [Publication/Platform Name]
 **URL**: [Full URL]
-**Publication Type**: [Major media / Trade publication / Online media]
+**Tier Rating**: [1/2/3] **Credibility**: [High/Medium/Low]
 
-**Reach Metrics**:
-- Circulation/Monthly Visitors: [Specific numbers with sources if available]
-- Geographic Reach: [Local / Regional / National / International]
-- Audience Demographics: [Description]
+**Why This Source Matters**:
+- Platform Type: [Major media/Industry publication/Social platform/Official site]
+- Reach: [Specific visitor numbers or circulation if known, or "estimated X"]
+- Reputation: [Why USCIS would find this credible]
+- Geographic Scope: [Local/Regional/National/International]
 
-**Editorial Standards**:
-- Editorial Process: [Description]
-- Journalist Credentials: [If known]
-- Publication Prestige: [Assessment]
+**What This Source Proves**:
+- Key criterion it supports: [Specific O-1B criterion]
+- Specific evidence provided: [What facts it establishes]
+- Strength: [Strong proof / Supporting evidence / Weak mention]
 
-**Industry Significance**:
-- Standing in Field: [Analysis]
-- Comparable Publications: [List similar publications]
-- Impact Factor: [If applicable]
+**Content Quality**:
+- Focus on beneficiary: [Primary/Secondary/Brief]
+- Key achievements mentioned: [List]
+- Tone: [Positive/Neutral]
 
-**Content Analysis**:
-- Article Title: [Full title]
-- Publication Date: [If determinable]
-- Length: [Estimate]
-- Focus on Beneficiary: [Primary subject / Secondary mention / Brief mention]
-- Tone: [Positive / Neutral / Critical]
-- Key Points Mentioned: [Paraphrase major points about beneficiary]
-- Context: [Why this coverage matters for the petition]
+**Score**: [1-10]
 
-**Significance Score**: [1-10]
-**Quality Assessment**: [High / Medium / Low]
+### PART 2: AGGREGATE SOURCE ANALYSIS
+**Tier Breakdown**:
+- Tier 1 Sources (Major/Official): [X] - [List them]
+- Tier 2 Sources (Industry/Regional): [Y] - [List them]
+- Tier 3 Sources (General/Local): [Z] - [List them]
 
-### PART 3: AGGREGATE ANALYSIS
-**Total Combined Reach**: [Sum of all circulation/viewership]
-**Geographic Distribution**: [Breakdown]
-**Timeline of Coverage**: [Pattern over time if dates available]
-**Coverage Quality Distribution**: [How many high/medium/low quality]
+**Total Combined Reach**: [Calculate total audience]
+**Geographic Distribution**: [Where coverage appears]
+**Platform Diversity**: [Mix of media types]
 
-### PART 4: COMPARATIVE ANALYSIS
-[Compare beneficiary's media coverage to typical coverage in their field]
+### PART 3: SOURCE GAPS & RECOMMENDATIONS
+**Current Strengths**: [Which criteria have strong source support]
+**Weak Areas**: [Which criteria need better sources]
 
-### PART 5: USCIS STANDARDS ANALYSIS
-[How this coverage meets USCIS requirements for ${beneficiaryInfo.visaType}]
+**Recommended Additional Sources to Find**:
+1. [Specific type] - Search for: "[suggested query]" - Would prove: [criterion]
+2. [Specific type] - Search for: "[suggested query]" - Would prove: [criterion]
+[Continue with 5-10 specific recommendations]
 
-### PART 6: CONCLUSIONS
-[Overall assessment of media presence and its strength for the petition]
+### PART 4: USCIS EVALUATION PERSPECTIVE
+[How would USCIS view this source collection? What's missing?]
+
+### PART 5: FINAL ASSESSMENT
+- Source Quality Score: [X/10]
+- Source Diversity Score: [X/10]
+- Overall Media Presence: [Strong/Moderate/Weak]
 
 CRITICAL REQUIREMENTS:
-- **LENGTH**: This MUST be a COMPREHENSIVE 40+ PAGE document (~20,000+ words)
-- **DETAIL LEVEL**: Each publication analysis should be 2-4 pages with extensive detail
-- Write in COMPLETE, DETAILED paragraphs with thorough analysis
-- Analyze EVERY single URL in exhaustive detail (not brief summaries)
-- Research actual circulation/traffic data - be specific with numbers
-- Provide detailed publication quality assessments with justification
-- Calculate precise aggregate reach with methodology
-- Include extensive comparative analysis to field norms
-- Each publication deserves 2-3 pages of detailed assessment
+- **FOCUS**: Source credibility and how each proves visa criteria
+- **TARGET LENGTH**: 8,000-12,000 words (concise but thorough)
+- **BE SPECIFIC**: Rate each source's credibility with clear reasoning
+- **IDENTIFY GAPS**: State exactly what sources are missing
+- **ACTIONABLE**: Provide specific search queries for finding more sources
+- **TIER EVERY SOURCE**: Clear Tier 1/2/3 ratings
+- **MAP TO CRITERIA**: Show which sources prove which visa requirements
 
-**OUTPUT FORMAT**: Generate the FULL, UNABBREVIATED document. Do NOT summarize. Write as if this is the complete final document for attorney review.
-
-Generate the COMPLETE publication analysis now (aim for maximum detail and length):`;
+Generate the source-focused publication analysis now:`;
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 20480, // Increased by 25% from 16384 to prevent timeout truncation
+    max_tokens: 10000, // Optimized for source credibility analysis (8K-12K words)
     temperature: 0.3,
     messages: [
       {
@@ -423,7 +415,7 @@ Generate the COMPLETE URL reference document now:`;
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 10240, // Increased by 25% from 8192 for more comprehensive URL reference
+    max_tokens: 6000, // Optimized for URL categorization
     temperature: 0.2,
     messages: [
       {
@@ -607,24 +599,24 @@ Respectfully submitted,
 ---
 
 CRITICAL REQUIREMENTS:
-- **LENGTH**: This MUST be a COMPREHENSIVE 30-40 PAGE legal brief (~15,000-20,000 words)
-- **DETAIL LEVEL**: Each criterion argument should be 2-4 pages of detailed legal analysis
+- **TARGET LENGTH**: 15,000-20,000 words (professional but focused)
+- **DETAIL LEVEL**: Each criterion argument should be 1-2 pages of strong legal analysis
 - Professional legal writing with formal tone throughout
-- Proper citations to INA sections, CFR regulations, and case law
+- Proper citations to INA sections, CFR regulations
 - Cross-reference exhibits to URLs from Document 3
-- Statement of Facts should be 3-5 pages of detailed chronological narrative
-- Each criterion gets thorough legal analysis (not brief summaries)
+- Statement of Facts should be 2-3 pages of detailed narrative
+- Each criterion gets thorough legal argument with source citations
 - USCIS-ready format with proper structure
 - Persuasive but objective tone with strong legal arguments
-- Include detailed exhibit list organized by criterion
+- Include detailed exhibit list organized by criterion with source credibility notes
 
-**OUTPUT FORMAT**: Generate the FULL, UNABBREVIATED legal brief. This is a formal USCIS petition document. Write as if submitting to immigration officers.
+**OUTPUT FORMAT**: Generate a complete USCIS-ready legal brief. Professional and persuasive.
 
-Generate the COMPLETE legal brief now (aim for maximum professional detail and length):`;
+Generate the legal brief now:`;
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-5-20250929',
-    max_tokens: 20480, // Increased by 25% from 16384 to prevent timeout truncation
+    max_tokens: 12000, // Optimized for focused legal brief (15K-20K words)
     temperature: 0.3,
     messages: [
       {
