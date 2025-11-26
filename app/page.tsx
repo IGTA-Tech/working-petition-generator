@@ -22,6 +22,7 @@ export default function Home() {
   const [lookupLoading, setLookupLoading] = useState(false);
   const [lookupResults, setLookupResults] = useState<string[] | null>(null);
   const [showLookupModal, setShowLookupModal] = useState(false);
+  const [backgroundLoading, setBackgroundLoading] = useState(false);
 
   const [formData, setFormData] = useState<BeneficiaryInfo>({
     fullName: '',
@@ -154,6 +155,47 @@ export default function Home() {
       }));
       setShowLookupModal(false);
       alert(`✓ ${lookupResults.length} URLs added from lookup!`);
+    }
+  };
+
+  const handleGenerateBackground = async () => {
+    // Get all URLs (from lookup results or manually entered)
+    const allUrls = [...(lookupResults || []), ...formData.primaryUrls.filter(u => u.trim())];
+
+    if (allUrls.length === 0) {
+      alert('Please use the beneficiary lookup on Step 1 first, or add URLs manually on Step 3.');
+      return;
+    }
+
+    setBackgroundLoading(true);
+
+    try {
+      const response = await fetch('/api/generate-background', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          jobTitle: formData.fieldOfProfession,
+          fieldOfProfession: formData.fieldOfProfession,
+          urls: allUrls.slice(0, 15), // Use top 15 URLs
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setFormData(prev => ({
+          ...prev,
+          background: data.background,
+        }));
+        alert(`✓ Background generated! (${data.wordCount} words, ${data.charCount} characters)`);
+      } else {
+        alert('Error generating background: ' + (data.error || 'Unknown error'));
+      }
+    } catch (error) {
+      alert('Error generating background: ' + error);
+    } finally {
+      setBackgroundLoading(false);
     }
   };
 
@@ -398,6 +440,45 @@ export default function Home() {
                 />
                 <div className="text-sm text-gray-500 mt-2">
                   {formData.background.length} / 100 characters minimum
+                </div>
+              </div>
+
+              {/* AI Auto-Generate Background Button */}
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-xl p-6">
+                <div className="flex items-start gap-4">
+                  <Sparkles className="text-purple-600 mt-1 flex-shrink-0" size={32} />
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-purple-900 mb-2">
+                      🤖 AI Auto-Generate Background
+                    </h3>
+                    <p className="text-sm text-purple-800 mb-4">
+                      Let Claude AI write your detailed career background automatically using the URLs found from beneficiary lookup!
+                      This will generate a comprehensive 300-500 word narrative with dates, achievements, rankings, and more.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleGenerateBackground}
+                      disabled={backgroundLoading || (!lookupResults && formData.primaryUrls.filter(u => u.trim()).length === 0)}
+                      className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {backgroundLoading ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Generating Background...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={18} />
+                          Generate Background from URLs
+                        </>
+                      )}
+                    </button>
+                    {!lookupResults && formData.primaryUrls.filter(u => u.trim()).length === 0 && (
+                      <p className="text-xs text-purple-600 mt-2">
+                        ↑ Use beneficiary lookup on Step 1 first, or add URLs on Step 3
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 
