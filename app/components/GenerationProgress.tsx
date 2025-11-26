@@ -1,10 +1,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CheckCircle, Clock, FileText, Mail, Download, AlertCircle } from 'lucide-react';
+import { CheckCircle, Clock, FileText, Mail, Download, AlertCircle, FileStack } from 'lucide-react';
+
+interface UploadedDocument {
+  fileName: string;
+  fileType: string;
+  blobUrl: string;
+  summary: string;
+  pageCount?: number;
+}
 
 interface GenerationProgressProps {
   caseId: string;
+  beneficiaryName?: string;
+  visaType?: string;
+  fieldOfProfession?: string;
+  urls?: string[];
+  uploadedDocuments?: UploadedDocument[];
 }
 
 interface ProgressData {
@@ -17,13 +30,16 @@ interface ProgressData {
   error?: string;
 }
 
-export default function GenerationProgress({ caseId }: GenerationProgressProps) {
+export default function GenerationProgress({ caseId, beneficiaryName, visaType, fieldOfProfession, urls, uploadedDocuments }: GenerationProgressProps) {
   const [progressData, setProgressData] = useState<ProgressData>({
     stage: 'Initializing',
     progress: 0,
     message: 'Starting document generation...',
     status: 'processing',
   });
+  const [generatingExhibits, setGeneratingExhibits] = useState(false);
+  const [exhibitProgress, setExhibitProgress] = useState<string>('');
+  const [exhibitDownloadUrl, setExhibitDownloadUrl] = useState<string | null>(null);
 
   useEffect(() => {
     // If no caseId yet, don't start polling
@@ -68,7 +84,60 @@ export default function GenerationProgress({ caseId }: GenerationProgressProps) 
     );
   }
 
+  const handleGenerateExhibits = async () => {
+    const hasUrls = urls && urls.length > 0;
+    const hasDocs = uploadedDocuments && uploadedDocuments.length > 0;
+
+    if (!hasUrls && !hasDocs) {
+      alert('No URLs or documents available to generate exhibits');
+      return;
+    }
+
+    if (!beneficiaryName) {
+      alert('Beneficiary name is required');
+      return;
+    }
+
+    setGeneratingExhibits(true);
+    setExhibitProgress('Starting exhibit generation...');
+
+    try {
+      const response = await fetch('/api/generate-exhibits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          urls: urls.filter(u => u.trim()),
+          uploadedDocuments: uploadedDocuments || [],
+          beneficiaryName,
+          visaType: visaType || 'O-1A',
+          fieldOfProfession: fieldOfProfession || 'Not specified',
+          caseId: caseId || 'temp',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setExhibitProgress(`Success! Generated ${data.results.converted} exhibits organized by criterion. Cost: $${data.results.estimatedCost.toFixed(2)}`);
+        setExhibitDownloadUrl(data.results.combinedPdfUrl);
+      } else {
+        setExhibitProgress(`Error: ${data.error || 'Failed to generate exhibits'}`);
+        if (data.details) {
+          alert(data.details);
+        }
+      }
+    } catch (error) {
+      setExhibitProgress(`Error: ${error}`);
+    } finally {
+      setGeneratingExhibits(false);
+    }
+  };
+
   if (progressData.status === 'completed') {
+    const hasUrls = urls && urls.filter(u => u.trim()).length > 0;
+    const hasDocs = uploadedDocuments && uploadedDocuments.length > 0;
+    const totalEvidence = (urls?.filter(u => u.trim()).length || 0) + (uploadedDocuments?.length || 0);
+
     return (
       <div className="min-h-screen gradient-bg py-12 px-4">
         <div className="max-w-4xl mx-auto">
@@ -129,6 +198,72 @@ export default function GenerationProgress({ caseId }: GenerationProgressProps) 
                 <li>Verify all information is current and accurate</li>
               </ol>
             </div>
+
+            {(hasUrls || hasDocs) && (
+              <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-xl">
+                <div className="flex items-start gap-4">
+                  <FileStack className="text-purple-600 mt-1 flex-shrink-0" size={32} />
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-purple-900 mb-2">
+                      📎 Generate PDF Exhibits (Optional)
+                    </h3>
+                    <p className="text-sm text-purple-800 mb-4">
+                      Automatically convert your evidence ({urls?.filter(u => u.trim()).length || 0} URLs + {uploadedDocuments?.length || 0} documents) into professionally formatted PDF exhibits with:
+                    </p>
+                    <ul className="text-sm text-purple-700 space-y-1 mb-4 ml-4">
+                      <li>• Cover sheets with exhibit numbering and metadata</li>
+                      <li>• Archive.org permanent archival links</li>
+                      <li>• Organized by criterion (for EB-1A)</li>
+                      <li>• USCIS-ready formatting</li>
+                    </ul>
+
+                    {!generatingExhibits && !exhibitDownloadUrl && (
+                      <div className="space-y-2">
+                        <button
+                          onClick={handleGenerateExhibits}
+                          className="btn-primary flex items-center gap-2"
+                        >
+                          <FileStack size={18} />
+                          Generate PDF Exhibits
+                        </button>
+                        <p className="text-xs text-purple-600">
+                          Estimated cost: ${(urls?.filter(u => u.trim()).length || 0) * 0.097} (via API2PDF)
+                        </p>
+                      </div>
+                    )}
+
+                    {generatingExhibits && (
+                      <div className="p-4 bg-white border border-purple-200 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-5 h-5 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
+                          <p className="text-sm text-purple-900">{exhibitProgress}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {exhibitDownloadUrl && (
+                      <div className="space-y-3">
+                        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                          <p className="text-sm text-green-900 mb-2">✅ {exhibitProgress}</p>
+                        </div>
+                        <a
+                          href={exhibitDownloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-primary flex items-center gap-2 justify-center"
+                        >
+                          <Download size={18} />
+                          Download Complete Exhibits PDF
+                        </a>
+                        <p className="text-xs text-center text-purple-600">
+                          Includes exhibit list + all evidence organized by criterion
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="mt-6 text-center">
               <button

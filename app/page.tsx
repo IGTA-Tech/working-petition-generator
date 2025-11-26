@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Disable static generation for this page
 export const dynamic = 'force-dynamic';
@@ -13,6 +13,12 @@ export default function Home() {
   const [step, setStep] = useState(1);
   const [generating, setGenerating] = useState(false);
   const [caseId, setCaseId] = useState<string | null>(null);
+
+  // Generate caseId immediately on component mount
+  useEffect(() => {
+    const generatedCaseId = `case_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    setCaseId(generatedCaseId);
+  }, []);
   const [lookupLoading, setLookupLoading] = useState(false);
   const [lookupResults, setLookupResults] = useState<string[] | null>(null);
   const [showLookupModal, setShowLookupModal] = useState(false);
@@ -68,8 +74,8 @@ export default function Home() {
         const formDataToUpload = new FormData();
         formDataToUpload.append('file', file.file);
 
-        // Upload file
-        const response = await fetch('/api/upload', {
+        // Upload file with caseId
+        const response = await fetch(`/api/upload?caseId=${caseId}`, {
           method: 'POST',
           body: formDataToUpload,
         });
@@ -207,7 +213,16 @@ export default function Home() {
   };
 
   if (generating) {
-    return <GenerationProgress caseId={caseId || 'generating'} />;
+    return (
+      <GenerationProgress
+        caseId={caseId || 'generating'}
+        beneficiaryName={formData.fullName}
+        visaType={formData.visaType}
+        fieldOfProfession={formData.fieldOfProfession}
+        urls={formData.primaryUrls.filter(u => u.trim())}
+        uploadedDocuments={formData.uploadedFiles}
+      />
+    );
   }
 
   return (

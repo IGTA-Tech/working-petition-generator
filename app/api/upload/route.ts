@@ -43,8 +43,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Upload to Vercel Blob
-    const blob = await put(file.name, file, {
+    // Get caseId from query params or generate temporary one
+    const url = new URL(request.url);
+    const caseId = url.searchParams.get('caseId') || `temp_${Date.now()}`;
+
+    // Upload to Vercel Blob with caseId prefix for later cleanup
+    const blob = await put(`${caseId}/${file.name}`, file, {
       access: 'public',
       addRandomSuffix: true,
     });
@@ -65,6 +69,8 @@ export async function POST(request: NextRequest) {
         wordCount: processed.wordCount,
         pageCount: processed.pageCount,
         summary: processed.summary,
+        // Store blob URL for later exhibit generation
+        blobUrl: blob.url,
         // Don't send full extracted text in response (too large)
         // It will be extracted again during document generation
       },
