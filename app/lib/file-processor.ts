@@ -39,7 +39,7 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{ text: string
     try {
       // Step 1: Upload PDF to LlamaParse
       const formData = new FormData();
-      const blob = new Blob([buffer], { type: 'application/pdf' });
+      const blob = new Blob([new Uint8Array(buffer)], { type: 'application/pdf' });
       formData.append('file', blob, 'document.pdf');
 
       const uploadResponse = await fetch('https://api.cloud.llamaindex.ai/api/parsing/upload', {
