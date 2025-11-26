@@ -23,6 +23,7 @@ export interface BeneficiaryInfo {
   petitionerName?: string;
   itinerary?: string;
   briefMode?: BriefMode; // Generation mode selection
+  caseId?: string; // Optional caseId sent from client to ensure consistency across file uploads and generation
   // Legacy/alias fields for compatibility
   fieldOfExpertise?: string; // alias for fieldOfProfession
   urls?: string[]; // alias for primaryUrls

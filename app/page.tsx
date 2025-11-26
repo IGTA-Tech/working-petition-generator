@@ -14,11 +14,8 @@ export default function Home() {
   const [generating, setGenerating] = useState(false);
   const [caseId, setCaseId] = useState<string | null>(null);
 
-  // Generate caseId immediately on component mount
-  useEffect(() => {
-    const generatedCaseId = `case_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-    setCaseId(generatedCaseId);
-  }, []);
+  // caseId will be generated when user starts submitting (not on mount)
+  // This ensures the same caseId is used for file uploads AND document generation
   const [lookupLoading, setLookupLoading] = useState(false);
   const [lookupResults, setLookupResults] = useState<string[] | null>(null);
   const [showLookupModal, setShowLookupModal] = useState(false);
@@ -67,6 +64,13 @@ export default function Home() {
 
     for (const file of pendingFiles) {
       try {
+        // Generate caseId if not already present (file uploads might happen before submit)
+        let currentCaseId = caseId;
+        if (!currentCaseId) {
+          currentCaseId = `case_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+          setCaseId(currentCaseId);
+        }
+
         // Update status to uploading
         file.status = 'uploading';
         setUploadedFiles([...files]);
@@ -76,7 +80,7 @@ export default function Home() {
         formDataToUpload.append('file', file.file);
 
         // Upload file with caseId
-        const response = await fetch(`/api/upload?caseId=${caseId}`, {
+        const response = await fetch(`/api/upload?caseId=${currentCaseId}`, {
           method: 'POST',
           body: formDataToUpload,
         });
@@ -202,17 +206,33 @@ export default function Home() {
   const handleSubmit = async () => {
     setGenerating(true);
 
+    // Generate caseId if not already present (from file uploads)
+    let currentCaseId = caseId;
+    if (!currentCaseId) {
+      currentCaseId = `case_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      setCaseId(currentCaseId);
+    }
+
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          caseId: currentCaseId, // Send the caseId to the server
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setCaseId(data.caseId);
+        // Server should return the same caseId we sent
+        if (data.caseId !== currentCaseId) {
+          console.warn('Server returned different caseId than expected!', {
+            sent: currentCaseId,
+            received: data.caseId,
+          });
+        }
       } else {
         alert('Error: ' + data.error);
         setGenerating(false);

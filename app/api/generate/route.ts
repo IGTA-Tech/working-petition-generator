@@ -28,8 +28,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate case ID
-    const caseId = `case_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    // Use caseId from client if provided, otherwise generate new one
+    // This ensures files uploaded earlier use the same caseId as the generation process
+    const caseId = beneficiaryInfo.caseId || `case_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
     // Initialize case
     const petitionCase: PetitionCase = {
