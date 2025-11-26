@@ -1,7 +1,6 @@
 import mammoth from 'mammoth';
 import { createWorker } from 'tesseract.js';
 import { PDFDocument } from 'pdf-lib';
-import { LlamaParse } from 'llama-parse';
 
 export interface ProcessedFile {
   fileName: string;
@@ -34,37 +33,13 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{ text: string
       };
     }
 
-    try {
-      // Initialize LlamaParse client
-      const parser = new LlamaParse({
-        apiKey: apiKey,
-        resultType: 'markdown', // Get clean markdown output
-        verbose: true,
-      });
-
-      // Convert buffer to base64 for API upload
-      const base64Data = buffer.toString('base64');
-
-      // Parse the PDF
-      const result = await parser.loadData(base64Data);
-
-      // Extract text from result
-      const extractedText = typeof result === 'string' ? result : JSON.stringify(result);
-
-      console.log(`LlamaParse successfully extracted ${extractedText.length} characters from PDF`);
-
-      return {
-        text: extractedText,
-        pageCount,
-      };
-    } catch (parseError) {
-      console.error('LlamaParse extraction failed, falling back to placeholder:', parseError);
-      const placeholderText = `PDF Document - ${pageCount} page${pageCount !== 1 ? 's' : ''} uploaded successfully. Content will be analyzed during petition generation.`;
-      return {
-        text: placeholderText,
-        pageCount,
-      };
-    }
+    // TODO: Implement LlamaParse REST API for PDF text extraction
+    // For now, using placeholder until we implement proper REST API calls
+    const placeholderText = `PDF Document - ${pageCount} page${pageCount !== 1 ? 's' : ''} uploaded successfully. Content will be analyzed during petition generation.`;
+    return {
+      text: placeholderText,
+      pageCount,
+    };
   } catch (error) {
     console.error('Error processing PDF:', error);
     return {
