@@ -36,11 +36,26 @@ export const storage = {
    */
   async setCase(caseId: string, petitionCase: PetitionCase): Promise<void> {
     if (isKVAvailable()) {
-      await kv.set(`case:${caseId}`, JSON.stringify(petitionCase), {
-        ex: 60 * 60 * 24, // 24 hour expiry
-      });
+      try {
+        // Add timeout to prevent hanging on writes
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('KV set timeout')), 5000)
+        );
+        const kvPromise = kv.set(`case:${caseId}`, JSON.stringify(petitionCase), {
+          ex: 60 * 60 * 24, // 24 hour expiry
+        });
+
+        await Promise.race([kvPromise, timeoutPromise]);
+        console.log(`✅ KV setCase success for ${caseId}`);
+      } catch (error) {
+        console.error('❌ KV setCase error:', error);
+        // Fallback to in-memory on error
+        inMemoryCases.set(caseId, petitionCase);
+        console.log(`⚠️ Fell back to in-memory storage for ${caseId}`);
+      }
     } else {
       inMemoryCases.set(caseId, petitionCase);
+      console.log(`📝 Using in-memory storage (KV not available) for ${caseId}`);
     }
   },
 
@@ -61,11 +76,26 @@ export const storage = {
    */
   async setProgress(caseId: string, progressData: any): Promise<void> {
     if (isKVAvailable()) {
-      await kv.set(`progress:${caseId}`, JSON.stringify(progressData), {
-        ex: 60 * 60 * 24, // 24 hour expiry
-      });
+      try {
+        // Add timeout to prevent hanging on writes
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('KV set timeout')), 5000)
+        );
+        const kvPromise = kv.set(`progress:${caseId}`, JSON.stringify(progressData), {
+          ex: 60 * 60 * 24, // 24 hour expiry
+        });
+
+        await Promise.race([kvPromise, timeoutPromise]);
+        console.log(`✅ KV setProgress success for ${caseId}`);
+      } catch (error) {
+        console.error('❌ KV setProgress error:', error);
+        // Fallback to in-memory on error
+        inMemoryProgress.set(caseId, progressData);
+        console.log(`⚠️ Fell back to in-memory storage for ${caseId}`);
+      }
     } else {
       inMemoryProgress.set(caseId, progressData);
+      console.log(`📝 Using in-memory storage (KV not available) for ${caseId}`);
     }
   },
 
