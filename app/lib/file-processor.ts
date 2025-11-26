@@ -1,7 +1,7 @@
 import mammoth from 'mammoth';
 import { createWorker } from 'tesseract.js';
 import { PDFDocument } from 'pdf-lib';
-import LlamaParse from 'llama-parse';
+import { LlamaParse } from 'llama-parse';
 
 export interface ProcessedFile {
   fileName: string;
