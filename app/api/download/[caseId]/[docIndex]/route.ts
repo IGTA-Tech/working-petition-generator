@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cases } from '../../../generate/route';
+import { storage } from '@/app/lib/storage';
 import fs from 'fs';
 import path from 'path';
 
@@ -9,7 +9,7 @@ export async function GET(
 ) {
   const { caseId, docIndex } = params;
 
-  const petitionCase = cases.get(caseId);
+  const petitionCase = await storage.getCase(caseId);
 
   if (!petitionCase) {
     return NextResponse.json({ error: 'Case not found' }, { status: 404 });
