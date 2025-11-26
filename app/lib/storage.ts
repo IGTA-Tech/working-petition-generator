@@ -1,10 +1,16 @@
-import { kv } from '@vercel/kv';
+import { createClient } from '@vercel/kv';
 import { PetitionCase } from '@/app/types';
 
 // Check if KV is available (will be true in production with KV configured)
 const isKVAvailable = () => {
   return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 };
+
+// Create KV client with explicit configuration
+const kv = createClient({
+  url: process.env.KV_REST_API_URL || '',
+  token: process.env.KV_REST_API_TOKEN || '',
+});
 
 // Fallback in-memory storage for local development
 const globalForCases = global as unknown as {
