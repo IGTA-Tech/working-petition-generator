@@ -41,16 +41,18 @@ export async function POST(request: NextRequest) {
       status: 'processing',
     });
 
-    // Start generation in background using waitUntil to prevent function from freezing
-    // waitUntil allows async work to continue after the response is sent
-    if (typeof request.waitUntil === 'function') {
-      request.waitUntil(generateDocumentsAsync(caseId, beneficiaryInfo));
-    } else {
-      // Fallback for environments that don't support waitUntil
-      generateDocumentsAsync(caseId, beneficiaryInfo).catch(console.error);
-    }
+    // Generate documents synchronously - function waits for completion
+    // This ensures all progress is saved before the response returns
+    await generateDocumentsAsync(caseId, beneficiaryInfo);
 
-    return NextResponse.json({ caseId, status: 'processing' });
+    // Get final result
+    const finalCase = await storage.getCase(caseId);
+
+    return NextResponse.json({
+      caseId,
+      status: finalCase?.status || 'completed',
+      message: 'Generation completed successfully'
+    });
   } catch (error: any) {
     console.error('Error starting generation:', error);
     return NextResponse.json(
