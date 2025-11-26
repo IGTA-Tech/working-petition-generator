@@ -37,15 +37,9 @@ export const storage = {
   async setCase(caseId: string, petitionCase: PetitionCase): Promise<void> {
     if (isKVAvailable()) {
       try {
-        // Add timeout to prevent hanging on writes
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('KV set timeout')), 5000)
-        );
-        const kvPromise = kv.set(`case:${caseId}`, JSON.stringify(petitionCase), {
+        await kv.set(`case:${caseId}`, JSON.stringify(petitionCase), {
           ex: 60 * 60 * 24, // 24 hour expiry
         });
-
-        await Promise.race([kvPromise, timeoutPromise]);
         console.log(`✅ KV setCase success for ${caseId}`);
       } catch (error) {
         console.error('❌ KV setCase error:', error);
@@ -77,15 +71,9 @@ export const storage = {
   async setProgress(caseId: string, progressData: any): Promise<void> {
     if (isKVAvailable()) {
       try {
-        // Add timeout to prevent hanging on writes
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('KV set timeout')), 5000)
-        );
-        const kvPromise = kv.set(`progress:${caseId}`, JSON.stringify(progressData), {
+        await kv.set(`progress:${caseId}`, JSON.stringify(progressData), {
           ex: 60 * 60 * 24, // 24 hour expiry
         });
-
-        await Promise.race([kvPromise, timeoutPromise]);
         console.log(`✅ KV setProgress success for ${caseId}`);
       } catch (error) {
         console.error('❌ KV setProgress error:', error);
@@ -105,16 +93,11 @@ export const storage = {
   async getProgress(caseId: string): Promise<any | null> {
     if (isKVAvailable()) {
       try {
-        // Add timeout to prevent hanging
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('KV timeout')), 5000)
-        );
-        const kvPromise = kv.get<string>(`progress:${caseId}`);
-
-        const data = await Promise.race([kvPromise, timeoutPromise]) as string | null;
+        const data = await kv.get<string>(`progress:${caseId}`);
+        console.log(`🔍 KV getProgress for ${caseId}:`, data ? 'FOUND' : 'NOT_FOUND');
         return data ? JSON.parse(data) : null;
       } catch (error) {
-        console.error('KV getProgress error:', error);
+        console.error('❌ KV getProgress error:', error);
         // Fallback to in-memory on error
         return inMemoryProgress.get(caseId) || null;
       }
