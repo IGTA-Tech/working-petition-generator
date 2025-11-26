@@ -1,7 +1,7 @@
 import mammoth from 'mammoth';
 import { createWorker } from 'tesseract.js';
 import { PDFDocument } from 'pdf-lib';
-import { LlamaParseReader } from 'llamaindex';
+import LlamaParse from 'llama-parse';
 
 export interface ProcessedFile {
   fileName: string;
@@ -35,19 +35,21 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{ text: string
     }
 
     try {
-      // Initialize LlamaParse reader
-      const reader = new LlamaParseReader({
+      // Initialize LlamaParse client
+      const parser = new LlamaParse({
         apiKey: apiKey,
         resultType: 'markdown', // Get clean markdown output
         verbose: true,
       });
 
-      // Create a temporary file-like object from buffer
-      // LlamaParse expects a file path, so we'll use loadData with buffer
-      const documents = await reader.loadDataAsContent(buffer);
+      // Convert buffer to base64 for API upload
+      const base64Data = buffer.toString('base64');
 
-      // Extract text from all pages
-      const extractedText = documents.map(doc => doc.text).join('\n\n');
+      // Parse the PDF
+      const result = await parser.loadData(base64Data);
+
+      // Extract text from result
+      const extractedText = typeof result === 'string' ? result : JSON.stringify(result);
 
       console.log(`LlamaParse successfully extracted ${extractedText.length} characters from PDF`);
 

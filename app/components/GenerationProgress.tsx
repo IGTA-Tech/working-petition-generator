@@ -106,7 +106,7 @@ export default function GenerationProgress({ caseId, beneficiaryName, visaType, 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          urls: urls.filter(u => u.trim()),
+          urls: urls?.filter(u => u.trim()) || [],
           uploadedDocuments: uploadedDocuments || [],
           beneficiaryName,
           visaType: visaType || 'O-1A',
