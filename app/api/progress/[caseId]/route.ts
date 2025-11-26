@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { progress } from '../../generate/route';
+import { storage } from '@/app/lib/storage';
 
 export async function GET(
   request: NextRequest,
@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const caseId = params.caseId;
 
-  const progressData = progress.get(caseId);
+  const progressData = await storage.getProgress(caseId);
 
   if (!progressData) {
     return NextResponse.json(

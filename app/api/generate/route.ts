@@ -2,19 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { BeneficiaryInfo, PetitionCase } from '@/app/types';
 import { generateAllDocuments } from '@/app/lib/document-generator';
 import { sendDocumentsEmail } from '@/app/lib/email-service';
+import { storage } from '@/app/lib/storage';
 import fs from 'fs';
 import path from 'path';
-
-// In-memory storage for demo (in production, use a database)
-// Use global to persist across hot-reloads in development
-const globalForCases = global as unknown as { cases?: Map<string, PetitionCase>; progress?: Map<string, any> };
-const cases = globalForCases.cases ?? new Map<string, PetitionCase>();
-const progress = globalForCases.progress ?? new Map<string, any>();
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForCases.cases = cases;
-  globalForCases.progress = progress;
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,10 +31,10 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
     };
 
-    cases.set(caseId, petitionCase);
+    await storage.setCase(caseId, petitionCase);
 
     // Initialize progress
-    progress.set(caseId, {
+    await storage.setProgress(caseId, {
       stage: 'Initializing',
       progress: 0,
       message: 'Starting document generation...',
@@ -66,8 +56,8 @@ export async function POST(request: NextRequest) {
 
 async function generateDocumentsAsync(caseId: string, beneficiaryInfo: BeneficiaryInfo) {
   try {
-    const result = await generateAllDocuments(beneficiaryInfo, (stage, prog, message) => {
-      progress.set(caseId, {
+    const result = await generateAllDocuments(beneficiaryInfo, async (stage, prog, message) => {
+      await storage.setProgress(caseId, {
         stage,
         progress: prog,
         message,
@@ -118,16 +108,16 @@ async function generateDocumentsAsync(caseId: string, beneficiaryInfo: Beneficia
     });
 
     // Update case
-    const petitionCase = cases.get(caseId);
+    const petitionCase = await storage.getCase(caseId);
     if (petitionCase) {
       petitionCase.documents = documents;
       petitionCase.status = 'completed';
       petitionCase.completedAt = new Date();
-      cases.set(caseId, petitionCase);
+      await storage.setCase(caseId, petitionCase);
     }
 
     // Send email
-    progress.set(caseId, {
+    await storage.setProgress(caseId, {
       stage: 'Sending Email',
       progress: 95,
       message: 'Sending documents to your email...',
@@ -137,7 +127,7 @@ async function generateDocumentsAsync(caseId: string, beneficiaryInfo: Beneficia
     const emailSent = await sendDocumentsEmail(beneficiaryInfo, documents);
 
     // Update final progress
-    progress.set(caseId, {
+    await storage.setProgress(caseId, {
       stage: 'Complete',
       progress: 100,
       message: emailSent
@@ -149,7 +139,7 @@ async function generateDocumentsAsync(caseId: string, beneficiaryInfo: Beneficia
   } catch (error: any) {
     console.error('Error generating documents:', error);
 
-    progress.set(caseId, {
+    await storage.setProgress(caseId, {
       stage: 'Error',
       progress: 0,
       message: 'An error occurred during generation',
@@ -157,13 +147,11 @@ async function generateDocumentsAsync(caseId: string, beneficiaryInfo: Beneficia
       error: error.message,
     });
 
-    const petitionCase = cases.get(caseId);
+    const petitionCase = await storage.getCase(caseId);
     if (petitionCase) {
       petitionCase.status = 'error';
       petitionCase.error = error.message;
-      cases.set(caseId, petitionCase);
+      await storage.setCase(caseId, petitionCase);
     }
   }
 }
-
-export { cases, progress };
