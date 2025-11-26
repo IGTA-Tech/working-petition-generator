@@ -68,8 +68,20 @@ export const storage = {
    */
   async getProgress(caseId: string): Promise<any | null> {
     if (isKVAvailable()) {
-      const data = await kv.get<string>(`progress:${caseId}`);
-      return data ? JSON.parse(data) : null;
+      try {
+        // Add timeout to prevent hanging
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('KV timeout')), 5000)
+        );
+        const kvPromise = kv.get<string>(`progress:${caseId}`);
+
+        const data = await Promise.race([kvPromise, timeoutPromise]) as string | null;
+        return data ? JSON.parse(data) : null;
+      } catch (error) {
+        console.error('KV getProgress error:', error);
+        // Fallback to in-memory on error
+        return inMemoryProgress.get(caseId) || null;
+      }
     } else {
       return inMemoryProgress.get(caseId) || null;
     }
