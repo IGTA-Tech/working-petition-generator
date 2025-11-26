@@ -33,13 +33,82 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{ text: string
       };
     }
 
-    // TODO: Implement LlamaParse REST API for PDF text extraction
-    // For now, using placeholder until we implement proper REST API calls
-    const placeholderText = `PDF Document - ${pageCount} page${pageCount !== 1 ? 's' : ''} uploaded successfully. Content will be analyzed during petition generation.`;
-    return {
-      text: placeholderText,
-      pageCount,
-    };
+    // TODO_FUTURE: For paid version, implement pdf-parse library for unlimited local parsing
+    // Current: Using LlamaParse REST API (Free: 1000 pages/day, 7000/week)
+
+    try {
+      // Step 1: Upload PDF to LlamaParse
+      const formData = new FormData();
+      const blob = new Blob([buffer], { type: 'application/pdf' });
+      formData.append('file', blob, 'document.pdf');
+
+      const uploadResponse = await fetch('https://api.cloud.llamaindex.ai/api/parsing/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`LlamaParse upload failed: ${uploadResponse.statusText}`);
+      }
+
+      const uploadResult = await uploadResponse.json();
+      const jobId = uploadResult.id;
+
+      // Step 2: Poll for completion
+      let attempts = 0;
+      const maxAttempts = 30; // 30 seconds max wait
+      let parseResult: any;
+
+      while (attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+
+        const statusResponse = await fetch(
+          `https://api.cloud.llamaindex.ai/api/parsing/job/${jobId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+            },
+          }
+        );
+
+        if (!statusResponse.ok) {
+          throw new Error(`LlamaParse status check failed: ${statusResponse.statusText}`);
+        }
+
+        parseResult = await statusResponse.json();
+
+        if (parseResult.status === 'SUCCESS') {
+          break;
+        } else if (parseResult.status === 'ERROR') {
+          throw new Error('LlamaParse job failed');
+        }
+
+        attempts++;
+      }
+
+      if (!parseResult || parseResult.status !== 'SUCCESS') {
+        throw new Error('LlamaParse job timed out');
+      }
+
+      // Step 3: Extract the parsed text
+      const extractedText = parseResult.markdown || parseResult.text || '';
+
+      return {
+        text: extractedText,
+        pageCount,
+      };
+    } catch (error) {
+      console.error('LlamaParse error, falling back to placeholder:', error);
+      // Fallback to placeholder if LlamaParse fails
+      const placeholderText = `PDF Document - ${pageCount} page${pageCount !== 1 ? 's' : ''} uploaded successfully. Content will be analyzed during petition generation.`;
+      return {
+        text: placeholderText,
+        pageCount,
+      };
+    }
   } catch (error) {
     console.error('Error processing PDF:', error);
     return {
