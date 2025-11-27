@@ -1,0 +1,6 @@
+# Railway ignore file
+.git
+node_modules
+.next
+.vercel
+outputs
