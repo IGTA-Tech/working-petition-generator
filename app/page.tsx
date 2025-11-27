@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 
 // Disable static generation for this page
 export const dynamic = 'force-dynamic';
-import { BeneficiaryInfo, VisaType, UploadedFileData } from './types';
+import { BeneficiaryInfo, VisaType, UploadedFileData, UploadedFile } from './types';
 import { FileText, Mail, User, Briefcase, Globe, Info, ArrowRight, ArrowLeft, Sparkles, CheckCircle, Upload as UploadIcon, Search, X } from 'lucide-react';
 import GenerationProgress from './components/GenerationProgress';
-import FileUpload, { UploadedFile } from './components/FileUpload';
+import FileUpload from './components/FileUpload';
 
 export default function Home() {
   const [step, setStep] = useState(1);

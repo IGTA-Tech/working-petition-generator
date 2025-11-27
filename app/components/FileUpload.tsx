@@ -3,18 +3,7 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, File, X, CheckCircle, AlertCircle } from 'lucide-react';
-
-export interface UploadedFile {
-  id: string;
-  file: File;
-  name: string;
-  size: number;
-  type: string;
-  preview?: string;
-  status: 'pending' | 'uploading' | 'success' | 'error';
-  blobUrl?: string;
-  extractedText?: string;
-}
+import { UploadedFile } from '../types';
 
 interface FileUploadProps {
   onFilesChange: (files: UploadedFile[]) => void;

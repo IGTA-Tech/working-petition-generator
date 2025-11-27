@@ -9,6 +9,20 @@ export interface UploadedFileData {
   summary: string;
 }
 
+// Client-side file upload interface (for FileUpload component)
+// Note: Uses 'any' for file property to avoid referencing browser File API in server context
+export interface UploadedFile {
+  id: string;
+  file: any; // Browser File object - kept as 'any' to avoid server-side build errors
+  name: string;
+  size: number;
+  type: string;
+  preview?: string;
+  status: 'pending' | 'uploading' | 'success' | 'error';
+  blobUrl?: string;
+  extractedText?: string;
+}
+
 export type BriefMode = 'standard' | 'comprehensive';
 
 export interface BeneficiaryInfo {
