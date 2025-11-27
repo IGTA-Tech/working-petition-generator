@@ -81,6 +81,8 @@ export default function FileUpload({
     },
     maxSize,
     multiple: true,
+    // @ts-ignore - Enable folder upload in supported browsers
+    ...({ webkitdirectory: true, directory: true, mozdirectory: true } as any),
   });
 
   const removeFile = (id: string) => {
@@ -124,10 +126,10 @@ export default function FileUpload({
         ) : (
           <>
             <p className="text-lg font-semibold text-gray-700 mb-2">
-              Drag & drop files here, or click to browse
+              Drag & drop files or folders here, or click to browse
             </p>
             <p className="text-sm text-gray-500">
-              Supported: PDF, Word (DOCX/DOC), Images (JPG/PNG), Text
+              Supported: PDF, Word (DOCX/DOC), Images (JPG/PNG), Text files, and entire folders
             </p>
             <p className="text-xs text-gray-400 mt-2">
               Max {maxFiles} files, {Math.round(maxSize / 1024 / 1024)}MB total

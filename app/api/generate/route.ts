@@ -73,32 +73,35 @@ async function generateDocumentsAsync(caseId: string, beneficiaryInfo: Beneficia
       });
     });
 
-    // Prepare documents
+    // Prepare documents with descriptive names
+    const cleanName = beneficiaryInfo.fullName.replace(/\s/g, '_');
+    const visaType = beneficiaryInfo.visaType || 'O-1A';
+
     const documents = [
       {
         id: 'doc1',
-        name: `Document_1_Comprehensive_Analysis_${beneficiaryInfo.fullName.replace(/\s/g, '_')}.md`,
+        name: `${cleanName}_${visaType}_Evidence_Portfolio_and_Impact_Analysis.md`,
         content: result.document1,
         pageCount: Math.ceil(result.document1.length / 2500),
         timestamp: new Date(),
       },
       {
         id: 'doc2',
-        name: `Document_2_Publication_Analysis_${beneficiaryInfo.fullName.replace(/\s/g, '_')}.md`,
+        name: `${cleanName}_${visaType}_Publications_and_Citations_Report.md`,
         content: result.document2,
         pageCount: Math.ceil(result.document2.length / 2500),
         timestamp: new Date(),
       },
       {
         id: 'doc3',
-        name: `Document_3_URL_Reference_${beneficiaryInfo.fullName.replace(/\s/g, '_')}.md`,
+        name: `${cleanName}_${visaType}_Research_and_Source_Documentation.md`,
         content: result.document3,
         pageCount: Math.ceil(result.document3.length / 2500),
         timestamp: new Date(),
       },
       {
         id: 'doc4',
-        name: `Document_4_Legal_Brief_${beneficiaryInfo.fullName.replace(/\s/g, '_')}.md`,
+        name: `${cleanName}_${visaType}_Legal_Brief_and_Petition_Summary.md`,
         content: result.document4,
         pageCount: Math.ceil(result.document4.length / 2500),
         timestamp: new Date(),
