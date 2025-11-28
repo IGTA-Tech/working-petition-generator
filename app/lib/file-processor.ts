@@ -38,9 +38,13 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{ text: string
 
     try {
       // Step 1: Upload PDF to LlamaParse
-      const formData = new FormData();
-      const blob = new Blob([new Uint8Array(buffer)], { type: 'application/pdf' });
-      formData.append('file', blob, 'document.pdf');
+      // FormData and Blob are only available in browser/Node 18+ with fetch
+      const FormDataClass = globalThis.FormData || (await import('form-data')).default;
+      const formData = new FormDataClass();
+      const blob = typeof Blob !== 'undefined'
+        ? new Blob([new Uint8Array(buffer)], { type: 'application/pdf' })
+        : buffer;
+      formData.append('file', blob as any, 'document.pdf');
 
       const uploadResponse = await fetch('https://api.cloud.llamaindex.ai/api/parsing/upload', {
         method: 'POST',
@@ -148,8 +152,9 @@ export async function extractTextFromImage(buffer: Buffer): Promise<string> {
 
 /**
  * Process a single file and extract text based on type
+ * Note: File type is only available in browser context
  */
-export async function processFile(file: File): Promise<ProcessedFile> {
+export async function processFile(file: any): Promise<ProcessedFile> {
   const buffer = Buffer.from(await file.arrayBuffer());
   let extractedText = '';
   let pageCount: number | undefined;
@@ -196,8 +201,9 @@ export async function processFile(file: File): Promise<ProcessedFile> {
 
 /**
  * Process multiple files
+ * Note: File type is only available in browser context
  */
-export async function processFiles(files: File[]): Promise<ProcessedFile[]> {
+export async function processFiles(files: any[]): Promise<ProcessedFile[]> {
   const processPromises = files.map(file => processFile(file));
   return Promise.all(processPromises);
 }
